@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Decoded — Data Literacy for All</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --white:      #ffffff;
+  --off:        #f7f7f5;
+  --light:      #efefed;
+  --border:     #e0e0dc;
+  --muted:      #888880;
+  --dark:       #222220;
+  --black:      #111110;
+  --correct:    #1a7a3a;
+  --correct-bg: #edf7f1;
+  --wrong:      #c0392b;
+  --wrong-bg:   #fdf0ee;
+  --font: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--white);
+  color: var(--black);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page { display: none; min-height: 100vh; }
+.page.active { display: block; }
+
+/* ════════════════════════════════
+   HOME
+════════════════════════════════ */
+#home-page { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+
+.home-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 28px 0 20px; margin-bottom: 64px; border-bottom: 2px solid var(--black);
+}
+.site-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+.site-logo span { color: var(--muted); font-weight: 500; }
+.nav-xp {
+  font-size: 13px; font-weight: 600; color: var(--muted);
+  background: var(--off); border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 100px;
+}
+
+.hero { padding: 48px 0 56px; max-width: 680px; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 20px;
+}
+.hero-eyebrow::before { content:''; display:block; width:24px; height:2px; background:var(--black); }
+.hero h1 { font-size: clamp(40px,6vw,72px); font-weight:800; line-height:1.05; letter-spacing:-2px; margin-bottom:20px; }
+.hero h1 em { font-style:normal; text-decoration:underline; text-decoration-thickness:3px; text-underline-offset:5px; }
+.hero p { font-size:18px; color:var(--muted); max-width:520px; line-height:1.65; }
+
+.section-label {
+  font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid var(--border);
+}
+
+.modules-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:2px; background:var(--border); border:2px solid var(--black);
+}
+.module-card {
+  background:var(--white); padding:28px 28px 24px; cursor:pointer;
+  transition:background 0.15s; display:flex; flex-direction:column;
+  border:none; text-align:left; font-family:var(--font);
+}
+.module-card:hover { background:var(--off); }
+.module-card:focus-visible { outline:3px solid var(--black); outline-offset:-3px; }
+.card-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:14px; }
+.card-num { font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+.card-icon { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; background:var(--off); flex-shrink:0; }
+.card-title { font-size:20px; font-weight:700; line-height:1.2; letter-spacing:-0.3px; margin-bottom:8px; }
+.card-desc { font-size:13px; color:var(--muted); line-height:1.55; margin-bottom:16px; flex:1; }
+.card-footer { display:flex; align-items:center; justify-content:space-between; }
+.card-tags { display:flex; flex-wrap:wrap; gap:4px; }
+.tag { font-size:10px; font-weight:600; color:var(--muted); background:var(--light); padding:3px 8px; border-radius:4px; }
+.card-arrow { font-size:16px; color:var(--muted); transition:transform 0.15s,color 0.15s; }
+.module-card:hover .card-arrow { transform:translateX(4px); color:var(--black); }
+.card-done-badge { font-size:10px; font-weight:700; background:var(--black); color:var(--white); padding:3px 8px; border-radius:4px; letter-spacing:0.5px; }
+
+/* ════════════════════════════════
+   SHARED NAV
+════════════════════════════════ */
+.page-nav {
+  display:flex; align-items:center; gap:12px;
+  padding:24px 0; margin-bottom:40px; border-bottom:1px solid var(--border);
+}
+.btn-back {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:14px; font-weight:600; color:var(--muted);
+  background:none; border:1px solid var(--border);
+  padding:8px 16px; border-radius:8px; cursor:pointer; font-family:var(--font); transition:all 0.15s;
+}
+.btn-back:hover { color:var(--black); border-color:var(--black); background:var(--off); }
+.breadcrumb { font-size:13px; color:var(--muted); }
+
+/* ════════════════════════════════
+   INTRO PAGE
+════════════════════════════════ */
+#intro-page .inner { max-width:720px; margin:0 auto; padding:0 24px 80px; }
+.intro-header { padding:40px 0 36px; border-bottom:1px solid var(--border); margin-bottom:40px; }
+.intro-module-num { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
+.intro-icon { font-size:48px; margin-bottom:16px; display:block; }
+.intro-title { font-size:clamp(32px,5vw,52px); font-weight:800; letter-spacing:-1.5px; line-height:1.05; margin-bottom:16px; }
+.intro-desc { font-size:17px; color:var(--muted); line-height:1.65; max-width:560px; margin-bottom:24px; }
+.intro-meta { display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
+.meta-item { display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--muted); }
+.meta-dot { width:6px; height:6px; border-radius:50%; background:var(--border); }
+
+.intro-topics { background:var(--off); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:32px; }
+.intro-topics h3 { font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
+.topic-list { display:flex; flex-direction:column; gap:8px; }
+.topic-item { display:flex; align-items:flex-start; gap:10px; font-size:14px; font-weight:500; line-height:1.4; }
+.topic-item::before { content:'→'; color:var(--muted); font-size:12px; flex-shrink:0; margin-top:2px; }
+
+.btn-start {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--font); font-size:16px; font-weight:700;
+  background:var(--black); color:var(--white); border:none;
+  padding:16px 32px; border-radius:10px; cursor:pointer; transition:all 0.15s;
+}
+.btn-start:hover { background:#333; transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,0.15); }
+
+/* ════════════════════════════════
+   CONCEPTS PAGE  ← NEW
+════════════════════════════════ */
+#concepts-page .inner { max-width:760px; margin:0 auto; padding:0 24px 80px; }
+
+.concepts-header {
+  padding:32px 0 28px; border-bottom:1px solid var(--border); margin-bottom:36px;
+}
+.concepts-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:10px;
+}
+.concepts-eyebrow .pill {
+  background:var(--black); color:var(--white);
+  font-size:10px; padding:2px 8px; border-radius:100px; font-weight:700;
+}
+.concepts-title { font-size:clamp(26px,4vw,40px); font-weight:800; letter-spacing:-1px; line-height:1.1; margin-bottom:8px; }
+.concepts-subtitle { font-size:15px; color:var(--muted); line-height:1.6; }
+
+/* Concept card carousel */
+.concept-progress {
+  display:flex; align-items:center; gap:8px; margin-bottom:28px;
+}
+.concept-pip {
+  width:28px; height:4px; border-radius:2px; background:var(--light); transition:background 0.25s;
+}
+.concept-pip.active { background:var(--black); }
+.concept-pip.done  { background:var(--dark); opacity:0.35; }
+
+.concept-card {
+  border:2px solid var(--black); border-radius:16px; overflow:hidden;
+  margin-bottom:20px; animation:fadeUp 0.3s ease;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+.concept-card-header {
+  background:var(--black); color:var(--white);
+  padding:20px 28px; display:flex; align-items:center; gap:14px;
+}
+.concept-card-num {
+  font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:rgba(255,255,255,0.45); flex-shrink:0;
+}
+.concept-card-title { font-size:18px; font-weight:800; letter-spacing:-0.3px; line-height:1.2; }
+
+.concept-card-body { padding:28px; }
+
+.concept-plain {
+  font-size:16px; line-height:1.75; color:var(--dark); margin-bottom:20px;
+}
+.concept-plain strong { font-weight:700; color:var(--black); }
+
+/* Formula block */
+.formula-block {
+  background:var(--off); border:1px solid var(--border); border-radius:10px;
+  padding:18px 22px; margin-bottom:20px;
+}
+.formula-label {
+  font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:10px;
+}
+.formula-text {
+  font-size:17px; font-weight:700; letter-spacing:-0.3px; color:var(--black); line-height:1.4;
+}
+.formula-note { font-size:13px; color:var(--muted); margin-top:6px; line-height:1.5; }
+
+/* Example block */
+.example-block {
+  border-left:3px solid var(--dark); border-radius:0 8px 8px 0;
+  background:var(--off); padding:16px 20px; margin-bottom:20px;
+}
+.example-label {
+  font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:8px;
+}
+.example-text { font-size:14px; font-weight:500; line-height:1.7; color:var(--dark); }
+.example-text code {
+  background:var(--light); padding:1px 6px; border-radius:4px;
+  font-family:monospace; font-size:13px; color:var(--black);
+}
+
+/* Watch-out block */
+.watchout-block {
+  background:#fffbf0; border:1px solid #e8d87a; border-radius:10px;
+  padding:16px 20px; margin-bottom:20px; display:flex; gap:12px; align-items:flex-start;
+}
+.watchout-icon { font-size:18px; flex-shrink:0; }
+.watchout-text { font-size:14px; font-weight:500; line-height:1.6; color:#5c4a00; }
+.watchout-label { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#9a7c00; margin-bottom:4px; }
+
+/* Comparison table */
+.compare-table {
+  width:100%; border-collapse:collapse; margin-bottom:20px; border-radius:10px; overflow:hidden;
+  border:1px solid var(--border);
+}
+.compare-table th {
+  background:var(--black); color:var(--white); padding:10px 14px;
+  font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; text-align:left;
+}
+.compare-table td {
+  padding:11px 14px; font-size:13px; font-weight:500; border-bottom:1px solid var(--border);
+  vertical-align:top; line-height:1.5;
+}
+.compare-table tr:last-child td { border-bottom:none; }
+.compare-table tr:nth-child(even) td { background:var(--off); }
+
+/* Concept nav buttons */
+.concept-nav {
+  display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:8px;
+}
+.btn-concept-prev {
+  display:inline-flex; align-items:center; gap:6px; font-family:var(--font);
+  font-size:14px; font-weight:700; color:var(--muted);
+  background:none; border:1.5px solid var(--border); padding:12px 20px;
+  border-radius:10px; cursor:pointer; transition:all 0.15s;
+}
+.btn-concept-prev:hover { border-color:var(--black); color:var(--black); background:var(--off); }
+.btn-concept-prev:disabled { opacity:0.25; cursor:not-allowed; }
+
+.btn-concept-next {
+  display:inline-flex; align-items:center; gap:8px; font-family:var(--font);
+  font-size:14px; font-weight:700; background:var(--black); color:var(--white);
+  border:none; padding:13px 24px; border-radius:10px; cursor:pointer; transition:all 0.15s;
+}
+.btn-concept-next:hover { background:#333; transform:translateY(-1px); }
+
+.concepts-of-label {
+  font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap;
+}
+
+/* ════════════════════════════════
+   GAME PAGE
+════════════════════════════════ */
+#game-page .inner { max-width:720px; margin:0 auto; padding:0 24px 80px; }
+
+.game-nav {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 0; margin-bottom:28px; border-bottom:1px solid var(--border); gap:16px;
+}
+.game-nav-left { display:flex; align-items:center; gap:12px; min-width:0; }
+.game-module-title { font-size:13px; font-weight:700; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.game-nav-right { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.streak-pill { font-size:13px; font-weight:700; background:var(--off); border:1px solid var(--border); padding:5px 12px; border-radius:100px; }
+.xp-pill { font-size:13px; font-weight:700; background:var(--black); color:var(--white); padding:5px 12px; border-radius:100px; }
+
+.progress-steps { display:flex; align-items:center; gap:5px; margin-bottom:28px; }
+.step-dot { flex:1; height:4px; background:var(--light); border-radius:2px; transition:background 0.3s; }
+.step-dot.done    { background:var(--black); }
+.step-dot.current { background:#777; }
+.step-label { font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap; padding-left:8px; }
+
+.question-card {
+  background:var(--white); border:2px solid var(--black); border-radius:16px;
+  padding:36px; margin-bottom:16px; animation:fadeUp 0.25s ease;
+}
+.q-type-label {
+  font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:16px; display:flex; align-items:center; gap:8px;
+}
+.q-type-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.question-text { font-size:clamp(17px,2.5vw,22px); font-weight:700; line-height:1.35; letter-spacing:-0.3px; margin-bottom:20px; }
+
+.scenario-box {
+  background:var(--off); border-left:3px solid var(--dark);
+  border-radius:0 8px 8px 0; padding:16px 20px; margin-bottom:24px;
+}
+.scenario-box pre { font-family:var(--font); white-space:pre-wrap; font-size:13px; font-weight:500; line-height:1.8; }
+
+.options-grid { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+.option-btn {
+  display:flex; align-items:flex-start; gap:14px; width:100%;
+  background:var(--off); border:1.5px solid var(--border); border-radius:10px;
+  padding:16px 18px; cursor:pointer; font-family:var(--font); font-size:15px;
+  font-weight:500; color:var(--black); text-align:left; line-height:1.4; transition:all 0.15s;
+}
+.option-btn:hover:not(:disabled) { border-color:var(--black); background:var(--white); box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+.opt-letter {
+  display:flex; align-items:center; justify-content:center;
+  width:26px; height:26px; min-width:26px; border-radius:6px;
+  background:var(--light); border:1px solid var(--border);
+  font-size:11px; font-weight:700; color:var(--muted); margin-top:1px;
+}
+.option-btn.correct { border-color:var(--correct); background:var(--correct-bg); color:var(--correct); }
+.option-btn.correct .opt-letter { background:var(--correct); border-color:var(--correct); color:var(--white); }
+.option-btn.wrong   { border-color:var(--wrong); background:var(--wrong-bg); color:var(--wrong); }
+.option-btn.wrong   .opt-letter { background:var(--wrong); border-color:var(--wrong); color:var(--white); }
+
+.slider-container { padding:8px 0 0; }
+.slider-display { text-align:center; font-size:52px; font-weight:800; letter-spacing:-2px; margin-bottom:16px; }
+.slider-display .unit { font-size:28px; font-weight:600; color:var(--muted); vertical-align:super; }
+
+input[type="range"] {
+  width:100%; -webkit-appearance:none; height:6px;
+  background:var(--light); outline:none; border-radius:3px; margin-bottom:8px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance:none; width:24px; height:24px; background:var(--black);
+  border-radius:50%; cursor:pointer; border:3px solid var(--white); box-shadow:0 0 0 1.5px var(--black);
+}
+.slider-range-labels { display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:var(--muted); margin-bottom:20px; }
+
+.btn-submit {
+  width:100%; font-family:var(--font); font-size:15px; font-weight:700;
+  background:var(--black); color:var(--white); border:none;
+  padding:15px; border-radius:10px; cursor:pointer; transition:all 0.15s;
+}
+.btn-submit:hover:not(:disabled) { background:#333; }
+.btn-submit:disabled { opacity:0.35; cursor:not-allowed; }
+
+.chart-block { background:var(--off); border:1px solid var(--border); border-radius:10px; padding:20px; margin-bottom:20px; }
+.chart-block-title { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
+.bar-chart { display:flex; align-items:flex-end; gap:10px; height:110px; }
+.bar-wrap { display:flex; flex-direction:column; align-items:center; flex:1; }
+.bar { width:100%; border-radius:4px 4px 0 0; min-height:4px; position:relative; background:var(--dark); }
+.bar.outlier { background:var(--wrong); }
+.bar-val { font-size:10px; font-weight:700; color:var(--dark); position:absolute; top:-18px; left:50%; transform:translateX(-50%); white-space:nowrap; }
+.bar.outlier .bar-val { color:var(--wrong); }
+.bar-label { font-size:10px; font-weight:600; color:var(--muted); margin-top:6px; text-align:center; }
+
+.feedback-card { border-radius:14px; padding:28px; margin-top:12px; animation:fadeUp 0.25s ease; display:none; }
+.feedback-card.show { display:block; }
+.feedback-card.correct-fb { background:var(--correct-bg); border:2px solid var(--correct); }
+.feedback-card.wrong-fb   { background:var(--wrong-bg);   border:2px solid var(--wrong); }
+.feedback-result { display:flex; align-items:center; gap:10px; font-size:18px; font-weight:800; letter-spacing:-0.3px; margin-bottom:14px; }
+.feedback-result.correct { color:var(--correct); }
+.feedback-result.wrong   { color:var(--wrong); }
+.result-icon { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.correct .result-icon { background:var(--correct); color:var(--white); }
+.wrong   .result-icon { background:var(--wrong);   color:var(--white); }
+.feedback-explanation { font-size:14px; line-height:1.7; color:var(--black); margin-bottom:16px; }
+.insight-card { background:var(--white); border-radius:10px; padding:14px 16px; margin-bottom:20px; display:flex; gap:10px; align-items:flex-start; }
+.insight-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.insight-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+.insight-text { font-size:13px; font-weight:600; line-height:1.55; color:var(--dark); }
+
+.btn-next {
+  display:inline-flex; align-items:center; gap:8px; font-family:var(--font);
+  font-size:14px; font-weight:700; background:var(--black); color:var(--white);
+  border:none; padding:13px 24px; border-radius:10px; cursor:pointer; transition:all 0.15s;
+}
+.btn-next:hover { background:#333; transform:translateY(-1px); }
+
+/* ════════════════════════════════
+   RESULTS
+════════════════════════════════ */
+#results-page .inner { max-width:600px; margin:0 auto; padding:0 24px 80px; }
+.results-header { padding:32px 0 40px; border-bottom:1px solid var(--border); margin-bottom:40px; }
+.results-module-name { font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+.results-headline { font-size:clamp(32px,5vw,48px); font-weight:800; letter-spacing:-1.5px; line-height:1.05; margin-bottom:12px; }
+.results-subline { font-size:16px; color:var(--muted); line-height:1.6; }
+
+.score-block {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:2px; background:var(--border); border:2px solid var(--black);
+  border-radius:14px; overflow:hidden; margin-bottom:32px;
+}
+.score-cell { background:var(--white); padding:24px 20px; text-align:center; }
+.score-cell-val { font-size:36px; font-weight:800; letter-spacing:-1.5px; line-height:1; margin-bottom:6px; }
+.score-cell-label { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
+
+.grade-card { background:var(--black); color:var(--white); border-radius:14px; padding:28px; margin-bottom:24px; display:flex; align-items:center; gap:20px; }
+.grade-emoji { font-size:40px; }
+.grade-title { font-size:22px; font-weight:800; letter-spacing:-0.5px; margin-bottom:4px; }
+.grade-msg { font-size:14px; color:rgba(255,255,255,0.6); line-height:1.5; }
+
+.xp-awarded { background:var(--off); border:1px solid var(--border); border-radius:10px; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; font-size:14px; font-weight:600; }
+.xp-amount { font-size:20px; font-weight:800; letter-spacing:-0.5px; }
+
+.results-btns { display:flex; gap:10px; flex-wrap:wrap; }
+.btn-outline {
+  display:inline-flex; align-items:center; gap:6px; font-family:var(--font);
+  font-size:14px; font-weight:700; background:var(--white); color:var(--black);
+  border:1.5px solid var(--border); padding:13px 22px; border-radius:10px; cursor:pointer; transition:all 0.15s;
+}
+.btn-outline:hover { border-color:var(--black); background:var(--off); }
+
+/* ════════════════════════════════
+   TOAST
+════════════════════════════════ */
+.toast {
+  position:fixed; bottom:28px; right:28px; padding:12px 20px;
+  background:var(--black); color:var(--white); font-size:13px; font-weight:700;
+  border-radius:10px; z-index:9999; pointer-events:none;
+  animation:toastIn 0.25s ease, toastOut 0.25s ease 1.9s forwards;
+  box-shadow:0 4px 20px rgba(0,0,0,0.15);
+}
+@keyframes toastIn  { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes toastOut { to{opacity:0;transform:translateY(12px)} }
+
+@media (max-width:600px) {
+  .score-block { grid-template-columns:1fr; }
+  .grade-card  { flex-direction:column; align-items:flex-start; gap:12px; }
+  .question-card, .concept-card-body { padding:20px; }
+  .concept-card-header { padding:16px 20px; }
+  .results-btns { flex-direction:column; }
+  .btn-start, .btn-next, .btn-outline { width:100%; justify-content:center; }
+  .game-nav { flex-wrap:wrap; }
+  .concept-nav { flex-direction:column; }
+  .btn-concept-next, .btn-concept-prev { width:100%; justify-content:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HOME ══ -->
+<div id="home-page" class="page active">
+  <nav class="home-nav">
+    <div class="site-logo">Data <span>Decoded</span></div>
+    <div class="nav-xp" id="homeXpPill">0 XP total</div>
+  </nav>
+  <div class="hero">
+    <div class="hero-eyebrow">Data Literacy for All</div>
+    <h1>Build confidence<br>with <em>numbers</em>.</h1>
+    <p>7 interactive modules. Each one teaches you the concept first, then tests you with real scenarios. No maths degree required.</p>
+  </div>
+  <div class="section-label">Choose a module — click to begin</div>
+  <div class="modules-grid" id="modulesGrid"></div>
+</div>
+
+<!-- ══ INTRO ══ -->
+<div id="intro-page" class="page">
+  <div class="inner">
+    <nav class="page-nav">
+      <button class="btn-back" onclick="goHome()">← All Modules</button>
+      <span class="breadcrumb" id="introBreadcrumb"></span>
+    </nav>
+    <div class="intro-header">
+      <div class="intro-module-num" id="introNum"></div>
+      <span class="intro-icon" id="introIcon"></span>
+      <h1 class="intro-title" id="introTitle"></h1>
+      <p class="intro-desc" id="introDesc"></p>
+      <div class="intro-meta">
+        <div class="meta-item"><div class="meta-dot"></div><span id="introConceptCount">3 concepts</span></div>
+        <div class="meta-item"><div class="meta-dot"></div>5 questions</div>
+        <div class="meta-item"><div class="meta-dot"></div>~8 minutes</div>
+      </div>
+    </div>
+    <div class="intro-topics">
+      <h3>What you'll learn</h3>
+      <div class="topic-list" id="introTopics"></div>
+    </div>
+    <button class="btn-start" onclick="openConcepts()">Read the Concepts →</button>
+  </div>
+</div>
+
+<!-- ══ CONCEPTS ══ -->
+<div id="concepts-page" class="page">
+  <div class="inner">
+    <nav class="page-nav">
+      <button class="btn-back" onclick="showPage('intro-page')">← Back to Intro</button>
+      <span class="breadcrumb" id="conceptsBreadcrumb"></span>
+    </nav>
+    <div class="concepts-header">
+      <div class="concepts-eyebrow">
+        Concepts
+        <span class="pill" id="conceptsModuleTag"></span>
+      </div>
+      <h2 class="concepts-title" id="conceptsTitle"></h2>
+      <p class="concepts-subtitle">Read through each concept before the quiz. Use the arrows to move between them.</p>
+    </div>
+
+    <div class="concept-progress" id="conceptProgress"></div>
+    <div id="conceptCardArea"></div>
+
+    <div class="concept-nav">
+      <button class="btn-concept-prev" id="conceptPrevBtn" onclick="moveConcept(-1)" disabled>← Previous</button>
+      <span class="concepts-of-label" id="conceptOfLabel">1 of 3</span>
+      <button class="btn-concept-next" id="conceptNextBtn" onclick="moveConcept(1)">Next Concept →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GAME ══ -->
+<div id="game-page" class="page">
+  <div class="inner">
+    <nav class="game-nav">
+      <div class="game-nav-left">
+        <button class="btn-back" onclick="confirmExit()" style="padding:6px 12px;font-size:12px;">← Exit</button>
+        <span class="game-module-title" id="gameModuleTitle"></span>
+      </div>
+      <div class="game-nav-right">
+        <div class="streak-pill" id="streakPill">🔥 0</div>
+        <div class="xp-pill" id="xpPill">+0 XP</div>
+      </div>
+    </nav>
+    <div class="progress-steps" id="progressSteps"></div>
+    <div id="questionArea"></div>
+  </div>
+</div>
+
+<!-- ══ RESULTS ══ -->
+<div id="results-page" class="page">
+  <div class="inner">
+    <nav class="page-nav">
+      <button class="btn-back" onclick="goHome()">← All Modules</button>
+    </nav>
+    <div class="results-header">
+      <div class="results-module-name" id="rModuleName"></div>
+      <div class="results-headline" id="rHeadline">Complete!</div>
+      <p class="results-subline" id="rSubline"></p>
+    </div>
+    <div class="score-block">
+      <div class="score-cell"><div class="score-cell-val" id="rScore">0%</div><div class="score-cell-label">Score</div></div>
+      <div class="score-cell"><div class="score-cell-val" id="rCorrect">0/5</div><div class="score-cell-label">Correct</div></div>
+      <div class="score-cell"><div class="score-cell-val" id="rStreak">0</div><div class="score-cell-label">Best Streak</div></div>
+    </div>
+    <div class="grade-card">
+      <div class="grade-emoji" id="rEmoji">🎓</div>
+      <div>
+        <div class="grade-title" id="rGrade"></div>
+        <div class="grade-msg" id="rMsg"></div>
+      </div>
+    </div>
+    <div class="xp-awarded">
+      <span>XP earned this run</span>
+      <span class="xp-amount" id="rXP">+50 XP</span>
+    </div>
+    <div class="results-btns">
+      <button class="btn-start" onclick="beginModule()">Retry Quiz</button>
+      <button class="btn-outline" onclick="openConcepts()">Review Concepts</button>
+      <button class="btn-outline" onclick="goHome()">All Modules</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   MODULE DATA
+══════════════════════════════════════════════ */
+const MODULES = [
+  {
+    id:0, icon:"📈",
+    title:"Growth & Percentage Magic",
+    desc:"Master percentage change, growth rates, margin vs markup — the building blocks of business maths.",
+    topics:["Calculate % change correctly (always use the old value as base)","Distinguish margin from markup — they are never the same number","Understand why down 10% then up 10% leaves you below zero","Read growth figures without being fooled by the base"],
+
+    concepts:[
+      {
+        title:"What is Percentage Change?",
+        body:`
+          <p class="concept-plain">Percentage change tells you <strong>how much something has grown or shrunk relative to where it started</strong>. The key word is "relative" — you always measure against the original value.</p>
+          <div class="formula-block">
+            <div class="formula-label">The Formula</div>
+            <div class="formula-text">% Change = (New Value − Old Value) ÷ Old Value × 100</div>
+            <div class="formula-note">Always divide by the OLD (starting) value — never the new one.</div>
+          </div>
+          <div class="example-block">
+            <div class="example-label">Worked Example</div>
+            <div class="example-text">Revenue went from <code>£200k</code> to <code>£250k</code>.<br>Change = £50k. Base = £200k.<br>% Change = 50 ÷ 200 × 100 = <strong>25%</strong> — not 20%.</div>
+          </div>
+          <div class="watchout-block">
+            <div class="watchout-icon">⚠️</div>
+            <div><div class="watchout-label">Common Mistake</div><div class="watchout-text">Dividing by the NEW value gives 20% — technically "what fraction of the new number is the gain" — but that's not the growth rate. Always use the starting point as your base.</div></div>
+          </div>`
+      },
+      {
+        title:"Margin vs Markup — Not the Same Thing",
+        body:`
+          <p class="concept-plain">Two numbers that look similar but mean very different things. Both express profit — but they use <strong>different bases</strong>, so they always produce different percentages.</p>
+          <table class="compare-table">
+            <tr><th>Measure</th><th>Formula</th><th>Answers the question…</th></tr>
+            <tr><td><strong>Margin</strong></td><td>Profit ÷ Selling Price × 100</td><td>What % of the sale price is profit?</td></tr>
+            <tr><td><strong>Markup</strong></td><td>Profit ÷ Cost × 100</td><td>How much above cost did I price it?</td></tr>
+          </table>
+          <div class="example-block">
+            <div class="example-label">Worked Example</div>
+            <div class="example-text">Cost = <code>£60</code>, Selling Price = <code>£100</code>, Profit = <code>£40</code><br><strong>Margin</strong> = 40 ÷ 100 × 100 = <strong>40%</strong><br><strong>Markup</strong> = 40 ÷ 60 × 100 = <strong>66.7%</strong></div>
+          </div>
+          <div class="watchout-block">
+            <div class="watchout-icon">⚠️</div>
+            <div><div class="watchout-label">Why It Matters</div><div class="watchout-text">A sales team saying "we operate on 40% margin" and a supplier saying "we add 40% markup" are describing completely different profit levels. Mixing them up can cause serious pricing errors.</div></div>
+          </div>`
+      },
+      {
+        title:"Why Percentages Aren't Symmetric",
+        body:`
+          <p class="concept-plain">If a price rises 10% and then falls 10%, you might expect to be back where you started. <strong>You won't be.</strong> Percentage changes apply to different bases each time.</p>
+          <div class="formula-block">
+            <div class="formula-label">The Maths</div>
+            <div class="formula-text">£100 × 1.10 = £110 &nbsp;→&nbsp; £110 × 0.90 = £99</div>
+            <div class="formula-note">You end up £1 below your starting point, even though the percentages look equal.</div>
+          </div>
+          <p class="concept-plain">This happens because the 10% loss is applied to a <strong>higher base (£110)</strong>, so the absolute loss (£11) is bigger than the absolute gain (£10) that preceded it.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">Rule of Thumb</div><div class="watchout-text">To fully recover from an X% drop, you need more than X% gain. For a 10% drop: you need 11.1% gain. For a 50% drop: you need a 100% gain (doubling). The bigger the loss, the harder the recovery.</div></div>
+          </div>`
+      }
+    ],
+
+    questions:[
+      {type:"mcq",text:"Your revenue was £200k last year. This year it's £250k. What's your growth rate?",
+       scenario:"Last year:  £200,000\nThis year:  £250,000\nDifference: £50,000",
+       options:["20%","25%","50%","125%"],correct:1,
+       explanation:"Growth rate = (New − Old) ÷ Old × 100 = (250k − 200k) ÷ 200k × 100 = 25%. A very common trap is dividing by the NEW number instead, which gives 20% — wrong because growth is always measured relative to where you started.",
+       insight:"Always divide by the STARTING (old) number for % change. New minus old, over old."},
+      {type:"mcq",text:"A product costs £60 and you sell it for £100. Which statement is correct?",
+       scenario:"Cost price:    £60\nSelling price: £100\nProfit:        £40",
+       options:["Margin = 40%, Markup = 66.7%","Margin = 60%, Markup = 40%","Both margin and markup = 40%","Margin = 66.7%, Markup = 40%"],correct:0,
+       explanation:"MARGIN = Profit ÷ Selling Price = 40 ÷ 100 = 40%. MARKUP = Profit ÷ Cost = 40 ÷ 60 = 66.7%. Margin uses selling price as base; markup uses cost as base.",
+       insight:"Margin uses selling price as the base. Markup uses cost. They are never the same number."},
+      {type:"mcq",text:"Prices rose 10% in Year 1, then fell 10% in Year 2. Are you back to where you started?",
+       scenario:"Start:       £100\nAfter +10%:  £110\nAfter −10%:  £?",
+       options:["Yes — they cancel out perfectly","No — you end up at £99","No — you end up at £101","It depends on the product"],correct:1,
+       explanation:"£100 × 1.10 = £110, then £110 × 0.90 = £99. You are down £1. A 10% loss always causes more absolute damage than a 10% gain can repair, because the loss is applied to a larger base.",
+       insight:"Percentage moves are NOT symmetric. To fully recover from a 10% drop you need an 11.1% gain — not 10%."},
+      {type:"mcq",text:"A startup grew 100% this year. Its competitor grew 200%. How much faster did the competitor grow?",
+       scenario:"Company A: 100% growth  (£1m → £2m)\nCompany B: 200% growth  (£1m → £3m)",
+       options:["2× faster","1.5× faster","3× faster","Not comparable without absolute figures"],correct:1,
+       explanation:"200% vs 100% is a 2× difference in growth RATE. Note: 200% growth means tripling (you gain 200% of your base), while 100% growth means doubling.",
+       insight:"200% growth = tripling. 100% growth = doubling. Always clarify the base when discussing percentage changes."},
+      {type:"slider",text:"If a £50 product has a gross margin of 30%, what is the cost of goods?",
+       scenario:"Selling price:  £50\nGross margin:  30%\nFormula: Cost = Selling Price × (1 − Margin%)",
+       sliderMin:25,sliderMax:45,sliderStep:1,sliderDefault:35,correct:35,tolerance:0,unit:"£",
+       explanation:"Cost = Selling Price × (1 − Margin) = £50 × 0.70 = £35. The 30% margin means £15 of every £50 sale is profit, leaving £35 as cost.",
+       insight:"Cost = Selling Price × (1 − margin%). Not cost + 30% = selling price — that's the markup formula."}
+    ]
+  },
+
+  {
+    id:1, icon:"📊",
+    title:"Mean, Median & Outliers",
+    desc:"Learn when averages lie, which measure to use, and how a single outlier can distort everything.",
+    topics:["Choose between mean, median and mode for different data types","Identify when an outlier is skewing the average","Spot bimodal distributions hiding inside a single average","Understand why 'average salary' is often misleading"],
+
+    concepts:[
+      {
+        title:"The Three Averages",
+        body:`
+          <p class="concept-plain">There are three common types of average, and each answers a slightly different question. Picking the wrong one can give a completely misleading picture.</p>
+          <table class="compare-table">
+            <tr><th>Average</th><th>How it's calculated</th><th>Best used for…</th></tr>
+            <tr><td><strong>Mean</strong></td><td>Sum all values ÷ count</td><td>Symmetric data with no extreme outliers</td></tr>
+            <tr><td><strong>Median</strong></td><td>Middle value when sorted</td><td>Skewed data or data with outliers</td></tr>
+            <tr><td><strong>Mode</strong></td><td>Most frequent value</td><td>Categories, sizes, preferences</td></tr>
+          </table>
+          <div class="example-block">
+            <div class="example-label">Quick Example</div>
+            <div class="example-text">Salaries: <code>£25k, £28k, £30k, £32k, £200k</code><br>Mean = <strong>£63k</strong> (distorted by the outlier)<br>Median = <strong>£30k</strong> (middle value — more representative)<br>Mode = none (no repeated values)</div>
+          </div>`
+      },
+      {
+        title:"How Outliers Distort the Mean",
+        body:`
+          <p class="concept-plain">The mean is sensitive to every single value in a dataset. <strong>One extreme number can drag it far from what is "typical"</strong> — making the average misleading even when it's mathematically correct.</p>
+          <div class="formula-block">
+            <div class="formula-label">Demonstration</div>
+            <div class="formula-text">Dataset: 1, 2, 3, 4, 5, 100</div>
+            <div class="formula-note">Mean = 19.2 &nbsp;|&nbsp; Median = 3.5 &nbsp;|&nbsp; Without the 100: Mean = 3.0</div>
+          </div>
+          <p class="concept-plain">The single value of 100 inflated the mean from 3 to 19 — more than <strong>sixfold</strong>. The median barely moved. This is why income statistics always use median, not mean.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">Rule of Thumb</div><div class="watchout-text">If your data could contain extreme values (salaries, house prices, company revenues), always check the median alongside the mean. A big gap between them signals outliers are at work.</div></div>
+          </div>`
+      },
+      {
+        title:"Bimodal Distributions & Mode",
+        body:`
+          <p class="concept-plain">The <strong>mode</strong> is the most frequently occurring value. Unlike mean and median, it's the right choice when you want to know "what is most common" in categorical or count data.</p>
+          <div class="example-block">
+            <div class="example-label">Shoe Shop Example</div>
+            <div class="example-text">Sizes sold: <code>5, 5, 6, 6, 6, 7, 7, 8, 9, 10</code><br>Mode = <strong>6</strong> — this is what you should order most of.<br>Mean = 6.9 — a size nobody bought the most of.<br>Median = 6.5 — doesn't even exist as a size!</div>
+          </div>
+          <p class="concept-plain">A dataset can be <strong>bimodal</strong> (two equally common values) or have no mode at all. Bimodal distributions are often a clue that two different groups are hidden in your data — like customer segments or product lines.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">⚠️</div>
+            <div><div class="watchout-label">Watch Out</div><div class="watchout-text">A single "average" that looks unremarkable might be hiding two very different populations. An app with "average session time = 8 minutes" could have 70% of users leaving in 30 seconds and 30% staying 25+ minutes. Always look at the distribution, not just the average.</div></div>
+          </div>`
+      }
+    ],
+
+    questions:[
+      {type:"mcq",text:"Five employees earn: £25k, £28k, £30k, £32k, £200k. Which measure best describes 'typical' pay?",
+       scenario:"Salaries: £25k  £28k  £30k  £32k  £200k\nMean:     £63k\nMedian:   £30k\nMode:     none (no repeats)",
+       options:["Mean (£63k) — it uses all the data points","Median (£30k) — unaffected by the extreme value","Mode — the most frequently occurring value","You need all three together"],correct:1,
+       visual:"outlier_salary",
+       explanation:"The £200k outlier drags the mean to £63k — a figure no one earns anywhere near. The median (middle value when sorted) of £30k is far more representative of what a 'typical' employee takes home.",
+       insight:"When data has extreme outliers, median describes 'typical' better than mean. Mean is pulled toward extremes."},
+      {type:"mcq",text:"A shoe shop logs sizes sold: 5,5,6,6,6,7,7,8,9,10. Which average is most useful for stock ordering?",
+       scenario:"Sizes sold:  5  5  6  6  6  7  7  8  9  10\nMean:       ≈ 6.9\nMedian:      6.5\nMode:        6 (sold three times)",
+       options:["Mean (6.9) — uses all the data","Median (6.5) — middle value","Mode (6) — most frequently sold size","All three are equally useful"],correct:2,
+       explanation:"For a stock decision you want to know what you actually sell most. The MODE (6) is that answer. A mean of 6.9 would have you over-ordering size 7. A median of 6.5 doesn't exist as a shoe size.",
+       insight:"Mode wins for 'most popular category'. Mean works for continuous measurements. Median works for skewed distributions."},
+      {type:"mcq",text:"Dataset: 1, 2, 3, 4, 5, 100. If you remove the value 100, what happens to the mean?",
+       scenario:"With outlier:    Mean = (1+2+3+4+5+100)÷6 = 19.2\nWithout outlier: Mean = (1+2+3+4+5)÷5  = 3.0",
+       options:["It changes by about 2 points","It changes by about 5 points","It drops by about 16 points","The mean doesn't change significantly"],correct:2,
+       explanation:"Mean drops from 19.2 to 3.0 — a fall of 16.2 points! One single outlier inflated the mean more than sixfold. The median barely moves. This is why you should always visualise data before trusting any average.",
+       insight:"A single extreme value can dominate the mean entirely. Always plot your data before calculating averages."},
+      {type:"mcq",text:"Which statement about the mode is correct?",
+       options:["A dataset can only ever have one mode","The mode is always the most useful average","A dataset can have multiple modes, or no mode at all","The mode always equals the median when data is symmetric"],correct:2,
+       explanation:"A dataset is bimodal if two values tie for most frequent (e.g. [1,1,2,2]), trimodal if three tie, and has no mode if all values are equally frequent. Bimodal distributions often signal two different populations mixed together.",
+       insight:"Bimodal distributions are clues — they often mean two distinct groups are hiding in your data."},
+      {type:"mcq",text:"A startup reports 'average session time = 8 minutes.' What should you immediately question?",
+       options:["Whether they used the correct formula","Whether mean is masking a bimodal split: most users bounce in 30 sec while power users stay 30+ min","Whether the sample size is large enough","Whether weekends were included in the data"],correct:1,
+       explanation:"An 8-minute average could mask that 70% of users leave in under 30 seconds while 30% are engaged for 25+ minutes. These are two entirely different user behaviours, and the mean loses that signal entirely.",
+       insight:"An average is a single number hiding a whole story. Always ask: 'What does the distribution look like?'"}
+    ]
+  },
+
+  {
+    id:2, icon:"📉",
+    title:"Charts & Visual Traps",
+    desc:"Spot misleading charts, dual-axis tricks, bad pie charts, and the most common ways data visualisation deceives.",
+    topics:["Detect truncated Y-axes that exaggerate small changes","Understand how dual-axis charts imply false correlations","Know when pie charts are the wrong tool","Read log scales without misinterpreting growth"],
+
+    concepts:[
+      {
+        title:"The Truncated Axis Trick",
+        body:`
+          <p class="concept-plain">One of the most common chart tricks: <strong>starting the Y-axis at a value other than zero</strong>. This makes small differences look enormous and can make a 2% change look like a 200% change visually.</p>
+          <div class="example-block">
+            <div class="example-label">Spot the Difference</div>
+            <div class="example-text">Sales go from <code>97</code> to <code>99</code> units (+2%).<br>Y-axis starting at 0: the bars look nearly identical ✓<br>Y-axis starting at 95: the bars look dramatically different ✗</div>
+          </div>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">Always Ask</div><div class="watchout-text">Where does the Y-axis start? If it doesn't start at zero, the visual impression of the gap between bars is being amplified. This is especially common in news graphics and company reports. Check the numbers, not the bar heights.</div></div>
+          </div>`
+      },
+      {
+        title:"Dual-Axis Charts & Pie Chart Pitfalls",
+        body:`
+          <p class="concept-plain"><strong>Dual-axis charts</strong> overlay two datasets on one chart using two separate Y-axes. The problem: you can independently rescale each axis to make any two unrelated datasets appear to align perfectly.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">⚠️</div>
+            <div><div class="watchout-label">The Ice Cream Example</div><div class="watchout-text">Ice cream sales and pool visits both rise in summer and appear to correlate on a dual-axis chart. But you could equally overlay Nicolas Cage film releases and pool drownings — a real but meaningless correlation. Always check r² separately.</div></div>
+          </div>
+          <p class="concept-plain"><strong>Pie charts</strong> struggle when there are too many slices, when slices are similar in size, or when rendered in 3D. The human eye is poor at comparing areas and angles — we compare lengths far better.</p>
+          <div class="formula-block">
+            <div class="formula-label">Pie Chart Rule of Thumb</div>
+            <div class="formula-text">More than 4–5 slices? Use a bar chart.</div>
+            <div class="formula-note">3D perspective additionally distorts near slices, making them appear larger than far ones.</div>
+          </div>`
+      },
+      {
+        title:"Linear vs Logarithmic Scales",
+        body:`
+          <p class="concept-plain">A <strong>linear scale</strong> shows equal absolute steps (10, 20, 30…). A <strong>logarithmic scale</strong> shows equal percentage steps (10, 100, 1000…). Both are valid — but readers often misread one for the other.</p>
+          <table class="compare-table">
+            <tr><th>Scale Type</th><th>A straight line means…</th><th>Best for…</th></tr>
+            <tr><td><strong>Linear</strong></td><td>Constant absolute growth</td><td>Absolute amounts, comparisons</td></tr>
+            <tr><td><strong>Logarithmic</strong></td><td>Constant percentage growth rate</td><td>Growth rates, exponential trends</td></tr>
+          </table>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">Key Takeaway</div><div class="watchout-text">A "straight line" on a log scale means steady compounding — which could be doubling every year. It's not boring or flat; it may be growing extremely fast. Always check which scale a chart uses before reading the trend.</div></div>
+          </div>`
+      }
+    ],
+
+    questions:[
+      {type:"mcq",text:"A bar chart Y-axis starts at 95 instead of 0. Sales go from 97 to 99. What effect does this create?",
+       scenario:"Actual data:  97 units → 99 units  (+2%)\nY-axis range: 95 to 100  (not 0 to 100)\nVisual effect: bars look dramatically different",
+       options:["Nothing wrong — zooming in shows more detail","A 2% real change looks like a near-doubling visually","Non-zero axes are always wrong in bar charts","It only matters if the numbers are in the millions"],correct:1,
+       explanation:"By starting at 95, the visual difference between 97 and 99 appears enormous — the shorter bar seems tiny. The actual change is just 2 units. Truncated axes are one of the most commonly used (and deliberately misleading) chart tricks.",
+       insight:"Always check where the Y-axis starts. Non-zero bases on bar charts can make trivial changes look catastrophic."},
+      {type:"mcq",text:"A dual-axis chart overlays ice cream sales and pool visits — the lines align perfectly. What's the core problem?",
+       scenario:"Left axis:  Ice cream sales  (0 to 1,000 units)\nRight axis: Pool visits     (0 to 500 visits)\nBoth lines trend upward together in summer",
+       options:["Dual-axis charts are inherently always misleading","The two axes can be rescaled independently to make any two unrelated datasets align visually","You need a third variable to confirm the correlation","The chart just needs a clearer legend"],correct:1,
+       explanation:"By independently rescaling the left and right axes, you can make virtually any two datasets overlap visually. The apparent 'correlation' is an artefact of the chosen axis ranges, not the underlying data. Always calculate r² separately.",
+       insight:"Dual-axis charts should carry a health warning. Visual overlap almost always implies a relationship that requires independent verification."},
+      {type:"mcq",text:"A 3D pie chart has 8 slices of similar sizes. What makes this chart bad?",
+       options:["Pie charts cannot have more than 5 slices","3D perspective distorts slice areas; humans compare angles poorly; too many slices obscure differences","The colour scheme is probably too similar","Pie charts only work when values add to exactly 100"],correct:1,
+       explanation:"Pie charts fail when: 3D perspective makes near slices look bigger than far ones; too many similar-sized slices make parsing impossible; and humans are poor at comparing areas or angles — we're much better at comparing bar lengths.",
+       insight:"More than 4–5 slices? Use a bar chart. The eye judges lengths far more accurately than areas or angles."},
+      {type:"mcq",text:"A chart shows 'website traffic is EXPLODING' but uses a logarithmic Y-axis. What does that actually mean?",
+       scenario:"Linear scale: 100→200→400→800 curves steeply upward\nLog scale:    same data looks like a straight line",
+       options:["Log scales always distort and should never be used","Linear growth looks like exponential growth on a log scale","A straight line on a log scale means consistent PERCENTAGE growth — not necessarily dramatic absolute growth","Log scales compress data to hide what is really happening"],correct:2,
+       explanation:"On a log scale, a straight line means consistent percentage growth rate (e.g. doubling every year). It's not 'exploding' in absolute terms — it's steady compounding. Log scales are genuinely useful for showing growth rates, but readers often mistake 'straight line' for 'modest growth.'",
+       insight:"Log scales show RATES of change. Linear scales show absolute amounts. Both are valid — readers need to know which they're looking at."},
+      {type:"mcq",text:"'Customer satisfaction SOARS to 72%!' — it was 70% last year. Is this headline justified?",
+       scenario:"Last year: 70% satisfaction score\nThis year: 72% satisfaction score\nChange:    +2 percentage points",
+       options:["Yes — any improvement is worth celebrating","No — a 2 percentage point change is real but 'SOARS' grossly overstates it","It depends on the industry benchmark","Only matters if the sample size is statistically significant"],correct:1,
+       explanation:"The relative change is just 2.86% from a 70% base. This is a common technique: emotionally charged language to amplify a numerically modest change. Always translate the headline number back to absolute and relative terms yourself.",
+       insight:"Translate every dramatic headline into: (1) absolute change, (2) relative change, (3) is the language proportionate to the magnitude?"}
+    ]
+  },
+
+  {
+    id:3, icon:"🍦",
+    title:"Correlation ≠ Causation",
+    desc:"Discover classic statistical traps — ice cream and crime, spurious correlations, confounders, and when correlation is actually useful.",
+    topics:["Identify confounding variables that explain apparent correlations","Recognise spurious correlations that arise by chance","Understand proxy variables vs true causes","Know when correlation alone is sufficient for prediction"],
+
+    concepts:[
+      {
+        title:"The Confounder Problem",
+        body:`
+          <p class="concept-plain">A <strong>confounder</strong> is a hidden third variable that causes both of the variables you're observing to move together — creating a correlation that looks causal but isn't.</p>
+          <div class="example-block">
+            <div class="example-label">The Classic Example</div>
+            <div class="example-text">Ice cream sales ↑ and drowning deaths ↑ every summer.<br>Does ice cream cause drownings? <strong>No.</strong><br>The confounder is <strong>hot weather</strong>: heat → more swimming → more drownings AND heat → more ice cream sales.</div>
+          </div>
+          <div class="formula-block">
+            <div class="formula-label">The Test</div>
+            <div class="formula-text">Remove the confounder — does the correlation disappear?</div>
+            <div class="formula-note">If you only look at data from months with the same temperature, ice cream and drownings stop correlating.</div>
+          </div>`
+      },
+      {
+        title:"Spurious Correlations & Proxy Variables",
+        body:`
+          <p class="concept-plain"><strong>Spurious correlations</strong> are real statistical correlations between variables with zero causal connection. With enough variables, some will align purely by chance.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">🎬</div>
+            <div><div class="watchout-label">Real Example</div><div class="watchout-text">Nicolas Cage films released per year correlates at r=0.66 with US pool drownings. This is a genuine correlation in the data — and 100% meaningless causally. It arises simply because both numbers happen to fluctuate similarly over the same years.</div></div>
+          </div>
+          <p class="concept-plain">A <strong>proxy variable</strong> is something that merely signals the real cause without causing it. People who carry lighters are more likely to get lung cancer — not because lighters cause cancer, but because lighter-carriers tend to be smokers.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">Key Question</div><div class="watchout-text">When you spot a correlation, always ask: "Is there a plausible mechanism? Could this be a proxy? Could a confounder explain this?" If you can't answer yes to mechanism, be very cautious.</div></div>
+          </div>`
+      },
+      {
+        title:"When Correlation IS Useful",
+        body:`
+          <p class="concept-plain">Correlation gets a bad reputation, but it is genuinely powerful for <strong>prediction</strong> — even when you don't know the causal mechanism.</p>
+          <table class="compare-table">
+            <tr><th>Goal</th><th>What you need</th><th>Example</th></tr>
+            <tr><td><strong>Prediction</strong></td><td>Correlation is enough</td><td>Credit scores predict loan default — without causing it</td></tr>
+            <tr><td><strong>Intervention</strong></td><td>Causation is required</td><td>To reduce defaults, fix the underlying financial habits</td></tr>
+          </table>
+          <p class="concept-plain">Weather pressure changes predict rain without causing it. A biomarker can predict disease onset years before symptoms appear, guiding early intervention — even before the mechanism is fully understood.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">The Rule</div><div class="watchout-text">Correlation → useful for forecasting. Causation → required for changing an outcome. Know which problem you're trying to solve before deciding whether correlation alone is sufficient.</div></div>
+          </div>`
+      }
+    ],
+
+    questions:[
+      {type:"mcq",text:"Ice cream sales and drowning deaths both rise every summer. Does ice cream cause drownings?",
+       options:["Possibly — ice cream may affect swimming ability","No — hot weather (a confounder) independently causes both to rise","We need more data before concluding anything","The correlation is coincidental and entirely meaningless"],correct:1,
+       explanation:"Classic confounder: Hot weather → more swimming → more drownings. Separately, hot weather → more ice cream sales. Both variables share a common cause (heat) but have no causal relationship with each other. Remove the summer months and the correlation disappears.",
+       insight:"When two things correlate, always ask: is there a hidden third variable (confounder) causing both independently?"},
+      {type:"mcq",text:"Nicolas Cage films per year has a 66% correlation with US pool drownings. What does this mean?",
+       options:["Nicolas Cage films create anxiety that causes dangerous swimming","Pool safety policies should track Nicolas Cage's career","With enough variables, some will correlate purely by chance — this is a spurious correlation","There is a hidden confounder between film budgets and public leisure"],correct:2,
+       explanation:"This is a real example from Tyler Vigen's Spurious Correlations. With thousands of variables, many will align by pure chance. The correlation (r=0.66) is real; the causal mechanism is zero.",
+       insight:"Real correlation, zero causation. With enough data variables, random patterns always emerge. Always ask: 'Is there a plausible mechanism?'"},
+      {type:"mcq",text:"Countries with more TVs per household have longer life expectancy. Should we ship TVs to improve health?",
+       options:["Yes — TV could reduce stress and improve mental health","No — national wealth drives both TV ownership and better healthcare; wealth is the confounder","Interesting hypothesis worth testing in controlled trials","The correlation is strong enough to act on immediately"],correct:1,
+       explanation:"Wealth is the confounder: richer countries have better healthcare, food security, sanitation AND more TVs. TVs are a proxy for development level. Shipping televisions would add nothing to life expectancy.",
+       insight:"Many striking correlations are simply two different measurements of the same underlying variable — often wealth, development, or season."},
+      {type:"mcq",text:"People who carry lighters are more likely to get lung cancer. Do lighters cause cancer?",
+       options:["Possibly — flint chemicals could be carcinogenic with prolonged contact","No — smokers carry lighters; smoking causes cancer. The lighter is a proxy variable","We need a double-blind controlled study to determine causation","The correlation coefficient will clarify the true relationship"],correct:1,
+       explanation:"Smokers carry lighters. Smoking causes cancer. The lighter is merely a proxy — associated with the real cause (smoking) but causing nothing itself. Control for smoking and the lighter-cancer correlation vanishes.",
+       insight:"Ask of every correlation: Is this variable the CAUSE, or just associated with the real cause (a proxy)?"},
+      {type:"mcq",text:"When is strong correlation actually useful — even without established causation?",
+       scenario:"A biomarker has r = 0.92 correlation with disease onset two years later.",
+       options:["Never — you must establish causation before acting on any correlation","For PREDICTION — if X reliably predicts Y, we can forecast even without knowing why","Only in peer-reviewed published research","Only when the correlation exceeds 0.95"],correct:1,
+       explanation:"Correlation is extremely powerful for prediction even without causation. Credit scores correlate with loan default without causing it — but they still forecast risk accurately. You need causation for intervention; correlation is sufficient for forecasting.",
+       insight:"Correlation → useful for prediction. Causation → required for effective intervention. Know which goal you have."}
+    ]
+  },
+
+  {
+    id:4, icon:"🔬",
+    title:"Statistics for Humans",
+    desc:"P-values, sample size, and confidence intervals explained in plain language with real decisions at stake.",
+    topics:["Understand what a p-value actually measures (and what it doesn't)","Calculate whether your A/B test result is meaningful or noise","Interpret confidence intervals without overclaiming certainty","Spot the difference between statistical and practical significance"],
+
+    concepts:[
+      {
+        title:"P-Values Without the Jargon",
+        body:`
+          <p class="concept-plain">A <strong>p-value</strong> answers one specific question: <em>"If there were truly no effect, how likely would I be to see data as extreme as this purely by chance?"</em></p>
+          <div class="formula-block">
+            <div class="formula-label">What p = 0.03 Actually Means</div>
+            <div class="formula-text">If the null hypothesis (no effect) were true, we'd see results this extreme only 3% of the time by chance.</div>
+            <div class="formula-note">It does NOT mean: "There's a 97% chance the effect is real."</div>
+          </div>
+          <table class="compare-table">
+            <tr><th>Common Misconception</th><th>What It Actually Means</th></tr>
+            <tr><td>"p = 0.03 means 3% chance it doesn't work"</td><td>p = 0.03 means the DATA would be this surprising only 3% of the time if there were no effect</td></tr>
+            <tr><td>"p &lt; 0.05 means it's practically important"</td><td>Statistical significance ≠ practical importance. A tiny effect can be "significant" with a large enough sample.</td></tr>
+          </table>`
+      },
+      {
+        title:"Sample Size & Confidence Intervals",
+        body:`
+          <p class="concept-plain"><strong>Sample size</strong> determines how precisely you can estimate a population value. Too small, and your margin of error swamps any real signal. Too large, and tiny meaningless effects appear "statistically significant."</p>
+          <div class="example-block">
+            <div class="example-label">A/B Test Example</div>
+            <div class="example-text">Headline A: 51% clicks (n=200) vs Headline B: 52% clicks (n=200)<br>Margin of error ≈ ±7pp each → the 1pp difference is pure noise.<br>You'd need ~5,000 users per variant to reliably detect a 1pp difference.</div>
+          </div>
+          <p class="concept-plain">A <strong>confidence interval (CI)</strong> gives you a range of plausible values for an effect. A 95% CI of [2, 18] means the procedure that produced this interval will capture the true value 95% of the time across repeated samples.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">Practical Rule</div><div class="watchout-text">If zero is not inside your confidence interval, there's evidence of a real effect. If zero is inside the interval, the data is consistent with "no effect."</div></div>
+          </div>`
+      },
+      {
+        title:"Statistical vs Practical Significance",
+        body:`
+          <p class="concept-plain">A result can be <strong>statistically significant</strong> (unlikely to be chance) without being <strong>practically significant</strong> (large enough to matter in real life). With a big enough sample, almost anything becomes "significant."</p>
+          <div class="example-block">
+            <div class="example-label">Real Danger</div>
+            <div class="example-text">Study of 10,000 people finds one extra coffee reduces headaches by 0.1 points on a 100-point scale, p = 0.001.<br>Highly significant statistically. <strong>Completely trivial practically.</strong></div>
+          </div>
+          <p class="concept-plain">The <strong>multiple comparisons problem</strong>: if you test 20 different things at p &lt; 0.05, you expect 1 false positive just by chance. Researchers who cherry-pick the one "significant" result from many tests are engaged in p-hacking — whether they realise it or not.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">⚠️</div>
+            <div><div class="watchout-label">Always Ask</div><div class="watchout-text">How many hypotheses were tested before this "significant" result was found? And is the effect size big enough to matter in practice?</div></div>
+          </div>`
+      }
+    ],
+
+    questions:[
+      {type:"mcq",text:"A drug trial shows p = 0.03. The result is 'statistically significant.' What does that actually tell you?",
+       options:["There is a 3% chance the drug does not work","There is a 97% probability that the drug works","If the drug had no effect, results this extreme would occur only 3% of the time by chance","The effect is large enough to be clinically meaningful"],correct:2,
+       explanation:"P-value = the probability of seeing your data (or more extreme) IF the null hypothesis (no effect) were true. It does NOT tell you how likely the drug works. Statistical significance is not the same as practical significance.",
+       insight:"P-value is not 'the probability the null hypothesis is true.' It's how surprising the data is, assuming no effect."},
+      {type:"mcq",text:"Headline A gets 51% clicks, Headline B gets 52% clicks (200 users each). Should you declare B the winner?",
+       scenario:"Variant A: 102/200 clicks = 51% CTR\nVariant B: 104/200 clicks = 52% CTR\nDifference: 1 percentage point",
+       options:["Yes — 52% is higher than 51%","Not necessarily — with n=200, a 1pp difference is well within random noise","Run it for one more week to confirm","Yes if you can replicate the result three times"],correct:1,
+       explanation:"With only 200 users per variant, the margin of error is roughly ±7 percentage points. A 1pp difference is completely swamped by noise. To reliably detect a 1pp difference, you'd need around 5,000 users per variant.",
+       insight:"Small sample + small effect = meaningless result. Always calculate required sample size BEFORE running a test, not after."},
+      {type:"mcq",text:"A study reports a 95% CI for a treatment effect of [2, 18]. What can you correctly conclude?",
+       options:["There is a 95% probability that the true effect lies between 2 and 18","If you repeated this study many times, about 95% of those intervals would contain the true effect","You are 95% certain the treatment is beneficial","The true effect is definitely somewhere between 2 and 18"],correct:1,
+       explanation:"The confidence is in the METHOD, not in this specific interval. It means the procedure will capture the true value in 95% of repeated samples. Practically: because zero is not inside [2, 18], this suggests a real positive effect.",
+       insight:"The '95%' describes the long-run reliability of the method. Practically: if zero is outside your CI, there is evidence of a real effect."},
+      {type:"mcq",text:"10,000 people studied: one extra coffee reduces headaches by 0.1 points on a 100-point scale, p = 0.001. Should you change your behaviour?",
+       options:["Yes — p = 0.001 is highly statistically significant","No — the effect size (0.1 out of 100) is too small to matter in practice","Yes — any headache reduction is a health benefit","It depends on the type and frequency of headaches"],correct:1,
+       explanation:"With 10,000 people, even completely trivial effects become statistically significant. A 0.1-point change on a 100-point scale is undetectable in real life. Big samples can make irrelevant effects look 'significant.' Effect size matters just as much as — often more than — the p-value.",
+       insight:"Effect size + statistical significance both matter. Large samples can make meaningless effects appear 'significant.' Always ask: is this big enough to matter?"},
+      {type:"mcq",text:"A researcher tests 20 interventions. One returns p = 0.04. Should they publish 'we found a significant effect'?",
+       options:["Yes — p < 0.05 is the accepted threshold","No — testing 20 hypotheses, you'd expect roughly 1 false positive purely by chance","Yes, but only if the effect makes biological sense","Yes, but they should disclose the sample size"],correct:1,
+       explanation:"This is the multiple comparisons problem. Testing 20 independent hypotheses at α = 0.05 means you expect 1 false positive by chance. The Bonferroni correction would require p < 0.0025. That p = 0.04 is unimpressive when cherry-picked from 20 attempts.",
+       insight:"Always ask how many things were tested before the 'significant' result was found. More tests = more false positives. Pre-registration solves this."}
+    ]
+  },
+
+  {
+    id:5, icon:"📅",
+    title:"Forecasting & Trends",
+    desc:"Seasonality, moving averages, when to trust a trend line, and when extrapolation goes catastrophically wrong.",
+    topics:["Remove seasonal effects to find underlying trends","Apply moving averages to smooth out noise","Spot when exponential extrapolation becomes absurd","Handle structural breaks like COVID in historical data"],
+
+    concepts:[
+      {
+        title:"Seasonality & Year-on-Year Comparisons",
+        body:`
+          <p class="concept-plain"><strong>Seasonality</strong> is the predictable, recurring pattern in data caused by time of year — retail sales spike in December, ice cream spikes in July, flu cases spike in winter. It happens every year, so it tells you nothing about underlying growth.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">⚠️</div>
+            <div><div class="watchout-label">The Trap</div><div class="watchout-text">Comparing December sales to October sales and calling it "300% growth" is meaningless — December is always higher. You need to compare December to December last year (YoY — Year-over-Year) to find the real growth signal.</div></div>
+          </div>
+          <div class="formula-block">
+            <div class="formula-label">The Fix</div>
+            <div class="formula-text">YoY Growth = (This December − Last December) ÷ Last December × 100</div>
+            <div class="formula-note">This removes seasonal effects and shows true underlying growth.</div>
+          </div>`
+      },
+      {
+        title:"Moving Averages & Smoothing",
+        body:`
+          <p class="concept-plain">Raw data is noisy — day-to-day random fluctuations make it hard to see whether the overall trend is up, down, or flat. A <strong>moving average</strong> smooths out this noise by replacing each data point with the average of the surrounding period.</p>
+          <div class="formula-block">
+            <div class="formula-label">How It Works</div>
+            <div class="formula-text">3-month moving average for June = (April + May + June) ÷ 3</div>
+            <div class="formula-note">This is a "trailing" or "lagging" moving average — it uses past data.</div>
+          </div>
+          <p class="concept-plain">Moving averages are <strong>smoothing tools, not prediction tools</strong>. A longer window (e.g. 12 months) is smoother but responds more slowly to real changes in trend. A shorter window (e.g. 3 months) reacts faster but is noisier.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">Choosing the Window</div><div class="watchout-text">Match your moving average window to your decision frequency. Weekly decisions → 4-week MA. Annual planning → 12-month MA. The goal is to see the signal without the noise.</div></div>
+          </div>`
+      },
+      {
+        title:"When Extrapolation Fails",
+        body:`
+          <p class="concept-plain"><strong>Extrapolation</strong> means extending a past trend into the future. It's useful in the short term but becomes increasingly unreliable — and often absurd — the further you project.</p>
+          <div class="example-block">
+            <div class="example-label">The 300% Growth Trap</div>
+            <div class="example-text">A startup grows 300%/year for 3 years:<br>Year 1: £100k → Year 4: £8.1M<br>Extrapolated to Year 10: <strong>~£59 billion</strong><br>UK tech sector total: ~£150 billion<br>→ The model predicts owning 40% of the entire sector!</div>
+          </div>
+          <p class="concept-plain">Markets saturate. Competition grows. Regulatory scrutiny increases. Growth rates slow as the base gets larger. Any exponential model will eventually predict something physically or financially impossible.</p>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">Sense Check</div><div class="watchout-text">Always ask: "What does this model predict at year 20? At year 50?" If the answer is absurd, the model is wrong — even if it fits historical data perfectly. A model that fits the past too well (overfitting) often predicts the future poorly.</div></div>
+          </div>`
+      }
+    ],
+
+    questions:[
+      {type:"mcq",text:"A retailer's monthly sales average £100k, but December hits £300k. Is this 'real' growth?",
+       scenario:"Jan–Nov avg: ~£100k per month\nDecember:    £300k\nDecember last year: also ~£280k",
+       options:["Yes — sales tripled, that's genuine exceptional growth","No — this is seasonal variation. Compare December to December last year instead","Impossible to tell without further context","Yes, but only if marketing spend increased"],correct:1,
+       explanation:"December retail peaks are purely seasonal — they happen every year. Comparing December to October tells you nothing about underlying business growth. The right comparison is December YoY (year-over-year).",
+       insight:"YoY (Year-over-Year) comparison eliminates seasonal bias. Never compare peak to off-peak and call it growth."},
+      {type:"mcq",text:"A 3-month moving average of stock prices is 'smoother' than daily prices. What is this useful for?",
+       options:["Predicting future price movements more accurately","Removing short-term random noise to reveal the underlying directional trend","Meeting financial reporting requirements","Making charts look more professional for presentations"],correct:1,
+       explanation:"Moving averages smooth out day-to-day random noise to reveal the signal: is the trend broadly going up, down, or sideways? Daily prices are too noisy to read direction. Moving averages don't predict — they describe and smooth.",
+       insight:"Moving averages are smoothing tools, not prediction tools. Longer windows = more smoothing, more lag."},
+      {type:"mcq",text:"A startup grew 300% per year for 3 years. An analyst projects the same rate for year 10. What's the core flaw?",
+       scenario:"Year 1: £100k → Year 4: £8.1M\nExtrapolated Year 10 value: ~£59 billion\nUK tech sector total: ~£150 billion",
+       options:["The compound growth formula is wrong","Exponential extrapolation assumes the rate stays constant — but markets saturate, competition grows, and large numbers resist fast % growth","Three years of data is insufficient to establish a trend","This only applies to capital-intensive businesses"],correct:1,
+       explanation:"Even the world's greatest companies could not sustain 300% annual growth indefinitely. Markets hit saturation, competition emerges, and the law of large numbers makes the same percentage growth require exponentially more absolute revenue.",
+       insight:"Exponential extrapolation always collides with physical or market limits. Ask: 'What does this predict at year 20?' If absurd, the model is wrong."},
+      {type:"mcq",text:"COVID massively distorted 2020 data. How should you handle it when building a 2024–2026 forecast?",
+       scenario:"2019: Normal baseline\n2020: Structural break — lockdowns, closures\n2021–2023: Recovery period",
+       options:["Always include all real data — never exclude observations","Treat 2020 as a structural anomaly; use 2019 and 2021–2023 to establish baseline trend","Apply a statistical weighting to reduce 2020's influence","Include it with a written disclaimer in the report"],correct:1,
+       explanation:"2020 was a genuine structural break. Including it mechanically would distort trend lines and make forecasts less useful. Best practice: identify it as an anomaly, model it separately or exclude it from trend fitting, and articulate the reasoning clearly.",
+       insight:"Context beats mechanical data completeness. Years with genuine structural breaks require judgement, not blind inclusion."},
+      {type:"mcq",text:"A forecast model fits the past 5 years with R² = 0.99 but year-6 predictions are wildly off. Why?",
+       scenario:"Training data (Years 1–5): R² = 0.99 — near-perfect fit\nYear 6 actual vs predicted: large errors",
+       options:["The model takes too long to compute for year 6","It overfits — it memorised historical noise as patterns, so it fails on new data","Investors won't trust models with perfect historical fits","It violates core statistical assumptions about error terms"],correct:1,
+       explanation:"An overfitted model memorises the past data — including all its random noise — as if they were meaningful patterns. It performs perfectly in-sample but fails out-of-sample because the 'patterns' don't generalise.",
+       insight:"In forecasting: a model too perfect at explaining the past is probably bad at predicting the future. Simplicity and generalisability beat historical fit."}
+    ]
+  },
+
+  {
+    id:6, icon:"💰",
+    title:"Financial Literacy Crash Course",
+    desc:"P&L vs cash flow, ROI, burn rate, unit economics — the numbers that determine whether a business survives.",
+    topics:["Distinguish profit from cash flow — a business can be both profitable and broke","Calculate ROI correctly and annualise for fair comparison","Compute burn rate and runway for any organisation","Assess LTV:CAC ratios and unit economics health"],
+
+    concepts:[
+      {
+        title:"Profit vs Cash Flow — Not the Same Thing",
+        body:`
+          <p class="concept-plain">This is one of the most important distinctions in business finance. <strong>Profit</strong> lives on the P&L. <strong>Cash</strong> lives in your bank. They often diverge — dramatically.</p>
+          <table class="compare-table">
+            <tr><th>Concept</th><th>When it's recorded</th><th>Where you see it</th></tr>
+            <tr><td><strong>Revenue / Profit</strong></td><td>When you send the invoice (earned)</td><td>P&L Statement</td></tr>
+            <tr><td><strong>Cash inflow</strong></td><td>When the customer actually pays</td><td>Cash Flow Statement</td></tr>
+          </table>
+          <div class="example-block">
+            <div class="example-label">Why Companies Go Bankrupt While Profitable</div>
+            <div class="example-text">You invoice £500k in December (P&L says profit = £50k).<br>Customers pay 90 days later → cash arrives in March.<br>Your rent and salaries are due in January → <strong>you run out of cash despite being profitable.</strong></div>
+          </div>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">Rule</div><div class="watchout-text">Always check BOTH the P&L and the cash flow statement. "Cash is king" isn't a cliché — it's why profitable businesses die.</div></div>
+          </div>`
+      },
+      {
+        title:"ROI, Burn Rate & Runway",
+        body:`
+          <p class="concept-plain"><strong>Return on Investment (ROI)</strong> measures the efficiency of an investment. Always annualise when comparing investments across different time periods.</p>
+          <div class="formula-block">
+            <div class="formula-label">ROI Formula</div>
+            <div class="formula-text">ROI = (Profit ÷ Investment) × 100</div>
+            <div class="formula-note">£10,000 invested → £12,500 returned → Profit = £2,500 → ROI = 25%</div>
+          </div>
+          <p class="concept-plain"><strong>Burn rate</strong> is how much cash a company spends each month (net of revenue). <strong>Runway</strong> is how long until you hit zero.</p>
+          <div class="formula-block">
+            <div class="formula-label">Runway Formula</div>
+            <div class="formula-text">Runway (months) = Cash on Hand ÷ Monthly Net Burn</div>
+            <div class="formula-note">£300k cash ÷ £50k/month burn = 6 months runway</div>
+          </div>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">Founder Rule of Thumb</div><div class="watchout-text">Start your next fundraise when you have 6 months of runway left — not 2. Fundraising takes time, and running out of cash is non-negotiable.</div></div>
+          </div>`
+      },
+      {
+        title:"Unit Economics: LTV, CAC & Gross Margin",
+        body:`
+          <p class="concept-plain"><strong>Unit economics</strong> asks: do we make money on each individual customer? The two key metrics are LTV and CAC.</p>
+          <table class="compare-table">
+            <tr><th>Metric</th><th>What it measures</th><th>Formula</th></tr>
+            <tr><td><strong>LTV</strong></td><td>Lifetime Value — total revenue from one customer</td><td>Avg monthly revenue × Avg months retained</td></tr>
+            <tr><td><strong>CAC</strong></td><td>Customer Acquisition Cost — cost to win one customer</td><td>Total marketing + sales spend ÷ new customers</td></tr>
+            <tr><td><strong>LTV:CAC</strong></td><td>Unit economics health ratio</td><td>LTV ÷ CAC (aim for 3:1 minimum)</td></tr>
+          </table>
+          <div class="formula-block">
+            <div class="formula-label">Gross Margin on P&L</div>
+            <div class="formula-text">Gross Profit = Revenue − Cost of Goods Sold</div>
+            <div class="formula-note">Net Profit = Gross Profit − all operating expenses, interest, tax</div>
+          </div>
+          <div class="watchout-block">
+            <div class="watchout-icon">💡</div>
+            <div><div class="watchout-label">LTV:CAC Benchmarks</div><div class="watchout-text">&lt;1× = catastrophic &nbsp;|&nbsp; 1–3× = struggling &nbsp;|&nbsp; 3–5× = healthy &nbsp;|&nbsp; 5×+ = exceptional. Always calculate LTV after gross margin deduction — the raw revenue figure overstates the real value per customer.</div></div>
+          </div>`
+      }
+    ],
+
+    questions:[
+      {type:"mcq",text:"A company is profitable on its P&L but running out of cash. How is this possible?",
+       scenario:"Revenue invoiced: £500,000  (on P&L)\nNet profit:       £50,000\nCash in bank:     nearly zero\n(Customers have not paid yet)",
+       options:["The accountants have made a calculation error","Revenue is recognised when invoiced, but cash only arrives when paid — profit and cash are different things","The company is spending too much on operating expenses","Corporation tax payments must have drained the reserves"],correct:1,
+       explanation:"Profit lives on the P&L. Cash lives in your bank account. Revenue is 'booked' when earned (invoice sent), but cash only arrives when the customer actually pays. If you've invoiced £500k but no one has paid yet, you're profitable on paper but broke in reality.",
+       insight:"Profitable ≠ cash-rich. Always check BOTH P&L and cash flow statement. The timing of money movement can sink a healthy business."},
+      {type:"mcq",text:"You invest £10,000 and receive back £12,500 after 18 months. What is your ROI?",
+       scenario:"Initial investment: £10,000\nTotal received:    £12,500\nProfit:            £2,500\nTime period:       18 months",
+       options:["12.5%","25%","125%","16.7% (annualised)"],correct:1,
+       explanation:"ROI = (Profit ÷ Investment) × 100 = (2,500 ÷ 10,000) × 100 = 25%. But 25% over 18 months is approximately 16.7% annualised. When comparing investments with different time horizons, you must annualise ROI.",
+       insight:"ROI = (Gain − Cost) ÷ Cost × 100. Always annualise when comparing investments across different time periods."},
+      {type:"mcq",text:"A startup spends £50,000 per month with £300,000 in the bank and no significant revenue. When do they run out of cash?",
+       scenario:"Monthly net burn: £50,000\nCash on hand:    £300,000\nCurrent revenue: negligible",
+       options:["3 months","5 months","6 months","8 months"],correct:2,
+       explanation:"Runway = Cash ÷ Monthly Burn Rate = £300,000 ÷ £50,000 = 6 months. This is the single most important number a startup founder must know at all times.",
+       insight:"Runway = Cash ÷ Net Burn Rate. Rule of thumb: begin fundraising with 6 months of runway remaining, not 2."},
+      {type:"mcq",text:"A SaaS company has CAC of £200. Customers pay £30/month and stay 10 months on average. Is this sustainable?",
+       scenario:"CAC:                          £200 per customer\nMonthly revenue per customer: £30\nAvg customer lifetime:         10 months\nLTV:                          £30 × 10 = £300\nLTV:CAC ratio:                1.5×",
+       options:["Yes — LTV (£300) exceeds CAC (£200), so it's profitable","No — 1.5× barely covers acquisition, with nothing left for operating costs","Borderline — industry benchmark is 3:1 minimum before factoring in gross margin","Need gross margin data to make any determination"],correct:2,
+       explanation:"LTV:CAC = 1.5×. The industry rule of thumb is minimum 3:1 — LTV should be at least 3× CAC to cover COGS, support costs, and overheads. At 1.5×, after gross margin deductions, the unit economics are likely loss-making.",
+       insight:"LTV:CAC benchmarks: <1 = catastrophic, 1–3 = struggling, 3–5 = healthy, 5+ = exceptional. Always factor in gross margin when calculating LTV."},
+      {type:"mcq",text:"What is the key difference between GROSS profit and NET profit on a P&L?",
+       scenario:"Revenue:            £1,000,000\nCost of Goods Sold: £400,000\nGross Profit:       £600,000  (60% margin)\nOperating Expenses: £350,000\nNet Profit:         £250,000  (25% margin)",
+       options:["Gross profit includes all expenses; net profit excludes tax","Gross profit = Revenue minus direct costs only. Net profit = what remains after ALL costs","They are the same calculation with different regional naming conventions","Gross profit applies to products; net profit applies to services"],correct:1,
+       explanation:"Gross Profit = Revenue − Cost of Goods Sold (direct costs of making/delivering the product). Net Profit = what's left after ALL costs: operating expenses, salaries, rent, marketing, interest, and taxes.",
+       insight:"High gross margin + low net margin = overhead problem. Low gross margin = structural product cost problem. Both matter, but for different reasons."}
+    ]
+  }
+];
+
+/* ══════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════ */
+let state = {
+  currentModule:0, currentConcept:0,
+  currentQ:0, score:0, sessionXP:0,
+  streak:0, bestStreak:0, answered:false,
+  xp:0, moduleXP:{}
+};
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+function init() {
+  try {
+    const d = JSON.parse(localStorage.getItem('datadecoded_v3') || '{}');
+    state.xp = d.xp || 0;
+    state.moduleXP = d.moduleXP || {};
+  } catch(e) {}
+  renderModules();
+  document.getElementById('homeXpPill').textContent = `${state.xp} XP total`;
+}
+
+function saveXP() {
+  try { localStorage.setItem('datadecoded_v3', JSON.stringify({xp:state.xp, moduleXP:state.moduleXP})); } catch(e) {}
+}
+
+/* ══════════════════════════════════════════════
+   PAGE NAV
+══════════════════════════════════════════════ */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+function goHome() {
+  renderModules();
+  document.getElementById('homeXpPill').textContent = `${state.xp} XP total`;
+  showPage('home-page');
+}
+
+function confirmExit() {
+  if (state.answered || state.currentQ === 0) { goHome(); return; }
+  if (confirm('Exit this module? Your quiz progress will be lost.')) goHome();
+}
+
+/* ══════════════════════════════════════════════
+   HOME
+══════════════════════════════════════════════ */
+function renderModules() {
+  document.getElementById('modulesGrid').innerHTML = MODULES.map(m => {
+    const done = !!state.moduleXP[m.id];
+    return `
+      <button class="module-card" onclick="openIntro(${m.id})" aria-label="Open module: ${m.title}">
+        <div class="card-top">
+          <div class="card-num">MODULE ${String(m.id+1).padStart(2,'0')}</div>
+          <div class="card-icon">${m.icon}</div>
+        </div>
+        <div class="card-title">${m.title}</div>
+        <div class="card-desc">${m.desc}</div>
+        <div class="card-footer">
+          <div class="card-tags">${m.topics.slice(0,2).map(t=>`<span class="tag">${t.split(' ').slice(0,4).join(' ')}</span>`).join('')}</div>
+          ${done ? `<span class="card-done-badge">✓ Done</span>` : `<span class="card-arrow">→</span>`}
+        </div>
+      </button>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════
+   INTRO
+══════════════════════════════════════════════ */
+function openIntro(idx) {
+  const m = MODULES[idx];
+  state.currentModule = idx;
+  document.getElementById('introBreadcrumb').textContent = `Module ${idx+1} of ${MODULES.length}`;
+  document.getElementById('introNum').textContent = `MODULE ${String(idx+1).padStart(2,'0')}`;
+  document.getElementById('introIcon').textContent = m.icon;
+  document.getElementById('introTitle').textContent = m.title;
+  document.getElementById('introDesc').textContent = m.desc;
+  document.getElementById('introConceptCount').textContent = `${m.concepts.length} concepts`;
+  document.getElementById('introTopics').innerHTML = m.topics.map(t =>
+    `<div class="topic-item">${t}</div>`).join('');
+  showPage('intro-page');
+}
+
+/* ══════════════════════════════════════════════
+   CONCEPTS
+══════════════════════════════════════════════ */
+function openConcepts() {
+  const m = MODULES[state.currentModule];
+  state.currentConcept = 0;
+  document.getElementById('conceptsBreadcrumb').textContent = `Module ${state.currentModule+1} of ${MODULES.length}`;
+  document.getElementById('conceptsModuleTag').textContent = m.title;
+  document.getElementById('conceptsTitle').textContent = `${m.concepts.length} concepts to know before you start`;
+  renderConceptCard();
+  showPage('concepts-page');
+}
+
+function renderConceptCard() {
+  const m = MODULES[state.currentModule];
+  const c = m.concepts[state.currentConcept];
+  const total = m.concepts.length;
+  const idx = state.currentConcept;
+
+  // Progress pips
+  document.getElementById('conceptProgress').innerHTML = m.concepts.map((_,i) => {
+    const cls = i < idx ? 'done' : i === idx ? 'active' : '';
+    return `<div class="concept-pip ${cls}"></div>`;
+  }).join('');
+
+  // Card
+  document.getElementById('conceptCardArea').innerHTML = `
+    <div class="concept-card">
+      <div class="concept-card-header">
+        <div class="concept-card-num">Concept ${idx+1}</div>
+        <div class="concept-card-title">${c.title}</div>
+      </div>
+      <div class="concept-card-body">${c.body}</div>
+    </div>`;
+
+  // Nav
+  document.getElementById('conceptOfLabel').textContent = `${idx+1} of ${total}`;
+  document.getElementById('conceptPrevBtn').disabled = idx === 0;
+
+  const nextBtn = document.getElementById('conceptNextBtn');
+  if (idx === total - 1) {
+    nextBtn.textContent = 'Start the Quiz →';
+    nextBtn.onclick = beginModule;
+  } else {
+    nextBtn.textContent = 'Next Concept →';
+    nextBtn.onclick = () => moveConcept(1);
+  }
+}
+
+function moveConcept(dir) {
+  const m = MODULES[state.currentModule];
+  const next = state.currentConcept + dir;
+  if (next < 0 || next >= m.concepts.length) return;
+  state.currentConcept = next;
+  renderConceptCard();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ══════════════════════════════════════════════
+   QUIZ
+══════════════════════════════════════════════ */
+function beginModule() {
+  state.currentQ = 0; state.score = 0; state.sessionXP = 0;
+  state.streak = 0; state.bestStreak = 0; state.answered = false;
+  document.getElementById('gameModuleTitle').textContent = MODULES[state.currentModule].title;
+  showPage('game-page');
+  renderQuestion();
+}
+
+function renderProgressSteps() {
+  const total = MODULES[state.currentModule].questions.length;
+  let html = '';
+  for (let i = 0; i < total; i++) {
+    const cls = i < state.currentQ ? 'done' : i === state.currentQ ? 'current' : '';
+    html += `<div class="step-dot ${cls}"></div>`;
+  }
+  html += `<span class="step-label">${state.currentQ+1} of ${total}</span>`;
+  document.getElementById('progressSteps').innerHTML = html;
+}
+
+function renderQuestion() {
+  const m = MODULES[state.currentModule];
+  const q = m.questions[state.currentQ];
+  state.answered = false;
+  renderProgressSteps();
+  document.getElementById('streakPill').textContent = `🔥 ${state.streak}`;
+  document.getElementById('xpPill').textContent = `+${state.sessionXP} XP`;
+
+  let html = `
+    <div class="question-card">
+      <div class="q-type-label">${q.type==='mcq'?'Multiple Choice':'Estimate the Number'}</div>
+      <div class="question-text">${q.text}</div>`;
+
+  if (q.scenario) html += `<div class="scenario-box"><pre>${q.scenario}</pre></div>`;
+  if (q.visual === 'outlier_salary') html += buildOutlierChart();
+
+  if (q.type === 'mcq') {
+    const L = ['A','B','C','D'];
+    html += `<div class="options-grid">`;
+    q.options.forEach((opt,i) => {
+      html += `<button class="option-btn" id="opt_${i}" onclick="selectMCQ(${i})"><span class="opt-letter">${L[i]}</span><span>${opt}</span></button>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `
+      <div class="slider-container">
+        <div class="slider-display"><span class="unit">${q.unit||''}</span><span id="sliderNumVal">${q.sliderDefault}</span></div>
+        <input type="range" min="${q.sliderMin}" max="${q.sliderMax}" step="${q.sliderStep}"
+               value="${q.sliderDefault}" id="sliderInput"
+               oninput="document.getElementById('sliderNumVal').textContent=this.value">
+        <div class="slider-range-labels"><span>${q.unit||''}${q.sliderMin}</span><span>${q.unit||''}${q.sliderMax}</span></div>
+        <button class="btn-submit" id="submitBtn" onclick="submitSlider()">Submit Answer</button>
+      </div>`;
+  }
+  html += `</div><div class="feedback-card" id="feedbackCard"></div>`;
+  document.getElementById('questionArea').innerHTML = html;
+}
+
+function buildOutlierChart() {
+  const s = [25,28,30,32,200];
+  const max = Math.max(...s);
+  return `<div class="chart-block"><div class="chart-block-title">Salary Distribution (£k)</div><div class="bar-chart">
+    ${s.map((v,i)=>`<div class="bar-wrap"><div class="bar ${i===4?'outlier':''}" style="height:${Math.max((v/max)*100,3)}%"><div class="bar-val">${v}k</div></div><div class="bar-label">Emp ${i+1}</div></div>`).join('')}
+  </div></div>`;
+}
+
+function selectMCQ(idx) {
+  if (state.answered) return;
+  state.answered = true;
+  const q = MODULES[state.currentModule].questions[state.currentQ];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+  const ok = idx === q.correct;
+  btns[idx].classList.add(ok ? 'correct' : 'wrong');
+  if (!ok) btns[q.correct].classList.add('correct');
+  processResult(ok, q);
+}
+
+function submitSlider() {
+  if (state.answered) return;
+  state.answered = true;
+  const q = MODULES[state.currentModule].questions[state.currentQ];
+  const val = parseInt(document.getElementById('sliderInput').value);
+  const ok = Math.abs(val - q.correct) <= (q.tolerance||0);
+  document.getElementById('sliderInput').disabled = true;
+  document.getElementById('submitBtn').disabled = true;
+  processResult(ok, q);
+}
+
+function processResult(ok, q) {
+  if (ok) {
+    state.score++;
+    state.streak++;
+    if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+    const bonus = state.streak >= 5 ? 20 : state.streak >= 3 ? 15 : 10;
+    state.sessionXP += bonus;
+    document.getElementById('xpPill').textContent = `+${state.sessionXP} XP`;
+    document.getElementById('streakPill').textContent = `🔥 ${state.streak}`;
+    toast(state.streak >= 3 ? `🔥 ${state.streak} streak! +${bonus} XP` : `✓ Correct! +${bonus} XP`);
+  } else {
+    state.streak = 0;
+    document.getElementById('streakPill').textContent = `🔥 0`;
+    toast('✗ Not quite — read the explanation below');
+  }
+  showFeedback(ok, q);
+}
+
+function showFeedback(ok, q) {
+  const card = document.getElementById('feedbackCard');
+  card.className = `feedback-card show ${ok ? 'correct-fb' : 'wrong-fb'}`;
+  card.innerHTML = `
+    <div class="feedback-result ${ok ? 'correct' : 'wrong'}">
+      <div class="result-icon">${ok ? '✓' : '✗'}</div>
+      ${ok ? 'Correct!' : 'Not quite'}
+    </div>
+    <div class="feedback-explanation">${q.explanation}</div>
+    <div class="insight-card">
+      <div class="insight-icon">💡</div>
+      <div>
+        <div class="insight-label">Key Insight</div>
+        <div class="insight-text">${q.insight}</div>
+      </div>
+    </div>
+    <button class="btn-next" onclick="nextQuestion()">
+      ${state.currentQ < MODULES[state.currentModule].questions.length-1 ? 'Next Question →' : 'See Results →'}
+    </button>`;
+  card.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function nextQuestion() {
+  const total = MODULES[state.currentModule].questions.length;
+  if (state.currentQ < total-1) {
+    state.currentQ++;
+    renderQuestion();
+    window.scrollTo({top:0, behavior:'smooth'});
+  } else {
+    showResults();
+  }
+}
+
+/* ══════════════════════════════════════════════
+   RESULTS
+══════════════════════════════════════════════ */
+function showResults() {
+  const m = MODULES[state.currentModule];
+  const total = m.questions.length;
+  const pct = Math.round((state.score/total)*100);
+  const GRADES = [
+    {min:90, emoji:'🏆', grade:'Data Master',     msg:'Outstanding analytical instincts. You have genuine data fluency.'},
+    {min:70, emoji:'🎯', grade:'Data Analyst',    msg:'Strong performance. A few concepts to revisit, but solid foundations.'},
+    {min:50, emoji:'📚', grade:'Data Apprentice', msg:'Good start. Review the concepts and try again to sharpen your skills.'},
+    {min:0,  emoji:'🌱', grade:'Data Explorer',   msg:'Everyone starts here. Re-read the concepts and give it another go.'}
+  ];
+  const g = GRADES.find(x => pct >= x.min);
+  const finalXP = state.sessionXP + Math.floor((pct/100)*20);
+  state.xp += finalXP;
+  if (!state.moduleXP[state.currentModule] || finalXP > state.moduleXP[state.currentModule]) {
+    state.moduleXP[state.currentModule] = finalXP;
+  }
+  saveXP();
+  document.getElementById('rModuleName').textContent = `MODULE ${String(state.currentModule+1).padStart(2,'0')} — ${m.title.toUpperCase()}`;
+  document.getElementById('rHeadline').textContent = pct>=80 ? 'Excellent work.' : pct>=50 ? 'Good effort.' : 'Keep going.';
+  document.getElementById('rSubline').textContent = g.msg;
+  document.getElementById('rScore').textContent = `${pct}%`;
+  document.getElementById('rCorrect').textContent = `${state.score}/${total}`;
+  document.getElementById('rStreak').textContent = state.bestStreak;
+  document.getElementById('rEmoji').textContent = g.emoji;
+  document.getElementById('rGrade').textContent = g.grade;
+  document.getElementById('rMsg').textContent = `${state.score} of ${total} questions correct.`;
+  document.getElementById('rXP').textContent = `+${finalXP} XP`;
+  showPage('results-page');
+}
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
+function toast(msg) {
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const el = document.createElement('div');
+  el.className = 'toast'; el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2300);
+}
+
+init();
+</script>
+</body>
+</html>
